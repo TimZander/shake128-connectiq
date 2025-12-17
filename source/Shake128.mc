@@ -78,14 +78,11 @@ class Shake128 {
     public function digest(outputLen as Number) as ByteArray {
         if (!finalized) {
             // Apply padding: SUFFIX || 10*1
-            // XOR suffix at current position
-            var padByte = new [1]b;
-            padByte[0] = SUFFIX;
-            keccak.xorBytes(padByte, 0, 1, absorbed);
+            // Use xorByte() directly to avoid allocating a temporary array
+            keccak.xorByte(SUFFIX, absorbed);
 
             // XOR 0x80 at last byte of rate (position RATE-1)
-            padByte[0] = 0x80;
-            keccak.xorBytes(padByte, 0, 1, RATE - 1);
+            keccak.xorByte(0x80, RATE - 1);
 
             // Final permutation
             keccak.permute();
