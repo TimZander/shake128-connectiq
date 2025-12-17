@@ -95,10 +95,29 @@ var hash2 = shake.digest(16);
 
 ## Supported Devices
 
-This barrel supports all ConnectIQ devices with API level 3.0.0 or higher, including:
+This barrel supports all ConnectIQ devices with API level 3.0.0 or higher.
 
-- Round displays: 218x218 to 454x454
-- Rectangle displays: 208x208 to 360x360
+## Testing
+
+Run tests using the ConnectIQ simulator:
+
+```
+monkeyc -o bin/shake128-test.prg -f monkey.jungle -t
+connectiq
+monkeydo bin/shake128-test.prg <device> -t
+```
+
+### Test Cases
+
+| Test | Description |
+|------|-------------|
+| `testShake128Empty` | Empty input against NIST vector |
+| `testShake128Abc` | "abc" input against NIST vector |
+| `testShake128Streaming` | Streaming API matches single-shot |
+| `testShake128Reset` | Reset produces consistent results |
+| `testShake128VariableOutput` | Variable length outputs are prefixes |
+| `testShake128LongInput` | Multi-block absorption (>168 bytes) |
+| `testShake128LongOutput` | Multi-block squeeze (>168 bytes) |
 
 ## Implementation Notes
 
